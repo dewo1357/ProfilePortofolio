@@ -120,7 +120,7 @@ const Home = () => {
                 <X size={20} />
               </button>
             </div>
-            <Exp experiences={experiences} Setexperiences={Setexperiences} setOpenModal={openModal}/>
+            <Exp experiences={experiences} Setexperiences={Setexperiences} setOpenModal={setOpenModal}/>
           </div>
         </div>
       )}
