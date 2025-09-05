@@ -14,6 +14,7 @@ const Exp = ({ experiences, Setexperiences, setOpenModal }) => {
     start_date: null,
     end_date: null,
     tasks: [""],
+    isOngoing : null,
   });
 
   const [isOngoing, setIsOngoing] = useState(false);
@@ -31,6 +32,7 @@ const Exp = ({ experiences, Setexperiences, setOpenModal }) => {
     });
     const maxId = Math.max(...experiences.map((d) => d.id)) + 1;
     const DataBaru = { ...exp, id: maxId };
+    console.log(DataBaru)
     Setexperiences([DataBaru, ...experiences]);
     setOpenModal(false);
     setActiveLader(false);
@@ -112,9 +114,9 @@ const Exp = ({ experiences, Setexperiences, setOpenModal }) => {
               <input
                 type="checkbox"
                 checked={isOngoing}
-                onChange={() => {
+                onChange={(e) => {
                   setIsOngoing(() => !isOngoing);
-                  setExp({ ...exp, end_date: isOngoing ? null : exp.end_date });
+                  setExp({ ...exp,isOngoing : e.target.checked, end_date: isOngoing ? null : exp.end_date });
                 }}
                 className="sr-only peer"
               />
