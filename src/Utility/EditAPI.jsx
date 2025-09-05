@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const EditAPI = async (endpoint, data) => {
-   const token = JSON.parse(localStorage.Token)
+  const token = JSON.parse(localStorage.Token);
   try {
     const response = await axios.put(
       `https://cruel-davita-sadeshop-79e55b22.koyeb.app/${endpoint}`,
@@ -15,12 +15,15 @@ const EditAPI = async (endpoint, data) => {
     if (response.status === 201) {
       console.log("Berhasil update:", response.data);
       return response.data;
-    }else if (response.status === 401) {
-      location.href = "/"
     }
     return false;
   } catch (error) {
-    console.error("Gagal update:", error);
+    console.log(error);
+    console.log(error.response.status);
+    if (error.response.status === 401) {
+      localStorage.removeItem("Token");
+      location.href = "/";
+    }
     return false;
   }
 };
