@@ -11,6 +11,7 @@ import { GET_API } from "../Utility/Get";
 import { X } from "lucide-react";
 import Exp from "../UI/Form/Exp";
 
+
 const Home = () => {
   const [experiences, Setexperiences] = useState([]);
   const [PrimaryProjects, SetPrimaryProjects] = useState([]);

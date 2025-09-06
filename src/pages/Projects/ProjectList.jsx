@@ -5,6 +5,7 @@ import { DeleteAPI } from "../../Utility/DeleteAPI";
 import ConfirmationModal from "../../UI/ConfirmationModal";
 import { useTheme } from "../../context/ThemeProvider";
 import Switch from "../../UI/Switch";
+import { Link } from "react-router-dom";
 
 export default function ProjectList({ projects = [], setProject }) {
   const [newStack, setNewStack] = useState([]);
