@@ -137,7 +137,7 @@ const About = () => {
             alt="jQuery"
             className="h-12 w-12 dark:content-[url('https://cdn.simpleicons.org/jquery/ffffff')]"
           />
-          <span className="text-sm mt-2 font-semibold">jQuery</span>
+          <span className="text-sm dark:text-primary mt-2 font-semibold">jQuery</span>
         </div>
       </div>
       <LoaderOverlay />
