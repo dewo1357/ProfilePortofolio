@@ -116,14 +116,14 @@ export default function ProjectList({ projects = [], setProject }) {
           <p className="mt-2 text-xs italic text-gray-500 dark:text-gray-400">
             {p.stack.join(", ")}
           </p>
-          <a
-            href={p.link}
+          <Link
+            to={p.link}
             target="_blank"
             rel="noopener noreferrer"
             className="dark:text-primary text-[--color-secondary] underline mt-3 block"
           >
             View Project →
-          </a>
+          </Link>
         </div>
       ))}
 
