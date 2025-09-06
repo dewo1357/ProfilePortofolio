@@ -111,7 +111,7 @@ export default function ProjectList({ projects = [], setProject }) {
           <h3 className="font-bold text-lg text-primary-dark dark:text-primary">
             {p.name}
           </h3>
-          <p className="text-sm mt-2 text-gray-700 dark:text-gray-300">
+          <p className="text-sm mt-2 text-gray-700 dark:text-gray-300 h-[80px]">
             {p.description}
           </p>
           <p className="mt-2 text-xs italic text-gray-500 dark:text-gray-400">
