@@ -62,7 +62,7 @@ const Home = () => {
             {PrimaryProjects.map((item, i) => (
               <div key={i}>
                 <div className="p-6 border rounded-lg shadow">
-                  <Link>
+                  <Link to={item.link}>
                     <h2 className="font-bold text-3xl mb-3 hover:underline">
                       {item.name}
                     </h2>
