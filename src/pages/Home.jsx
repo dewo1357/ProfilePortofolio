@@ -11,7 +11,6 @@ import { GET_API } from "../Utility/Get";
 import { X } from "lucide-react";
 import Exp from "../UI/Form/Exp";
 
-
 const Home = () => {
   const [experiences, Setexperiences] = useState([]);
   const [PrimaryProjects, SetPrimaryProjects] = useState([]);
@@ -20,7 +19,7 @@ const Home = () => {
   // Modal state
   const [openModal, setOpenModal] = useState(false);
 
-  const getExperience = () => {
+  const getExperience = async () => {
     axios
       .get("https://cruel-davita-sadeshop-79e55b22.koyeb.app/api/experiences")
       .then((res) => {
@@ -33,15 +32,18 @@ const Home = () => {
     const PrimaryProject = await GET_API("api/Primaryprojects");
     if (PrimaryProject) {
       SetPrimaryProjects(PrimaryProject);
-      setActiveLader(false);
     }
   };
 
-  useEffect(() => {
-    setActiveLader(true);
-    getExperience();
-    getPrimaryProjects();
+  const getData = async () => {
+    await getExperience();
+    await getPrimaryProjects();
     setActiveLader(false);
+  };
+
+  useEffect(() => {
+    getData()
+    setActiveLader(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -87,7 +89,6 @@ const Home = () => {
           <Experience>
             {localStorage.Token && Auth && (
               <div className="flex justify-center items-center mb-6">
-               
                 <button
                   onClick={() => setOpenModal(true)}
                   className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
@@ -97,7 +98,14 @@ const Home = () => {
               </div>
             )}
             {experiences.map((exp, i) => (
-              <ListExperience key={i} turnIndex={i} index={2} exp={exp} experiences={experiences} Setexperiences={Setexperiences} />
+              <ListExperience
+                key={i}
+                turnIndex={i}
+                index={2}
+                exp={exp}
+                experiences={experiences}
+                Setexperiences={Setexperiences}
+              />
             ))}
           </Experience>
         </section>
@@ -121,7 +129,11 @@ const Home = () => {
                 <X size={20} />
               </button>
             </div>
-            <Exp experiences={experiences} Setexperiences={Setexperiences} setOpenModal={setOpenModal}/>
+            <Exp
+              experiences={experiences}
+              Setexperiences={Setexperiences}
+              setOpenModal={setOpenModal}
+            />
           </div>
         </div>
       )}
