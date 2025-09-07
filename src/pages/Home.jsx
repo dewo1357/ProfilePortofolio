@@ -4,7 +4,6 @@ import ListExperience from "../UI/ListExperience";
 import LoaderOverlay from "../UI/LoaderOverlay";
 import Contact from "./Contact";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useTheme } from "../context/ThemeProvider";
 import { Link } from "react-router-dom";
 import { GET_API } from "../Utility/Get";
@@ -19,31 +18,45 @@ const Home = () => {
   // Modal state
   const [openModal, setOpenModal] = useState(false);
 
+  const EXPERIENCE = "Experience";
+  const PROJECT = "PrimaryProjects";
+
   const getExperience = async () => {
-    axios
-      .get("https://cruel-davita-sadeshop-79e55b22.koyeb.app/api/experiences")
-      .then((res) => {
-        Setexperiences(res.data);
-      })
-      .catch((err) => console.error("❌ Error fetch experiences:", err));
+    await get_data_from_source("api/experiences", Setexperiences, EXPERIENCE);
   };
 
   const getPrimaryProjects = async () => {
-    const PrimaryProject = await GET_API("api/Primaryprojects");
-    if (PrimaryProject) {
-      SetPrimaryProjects(PrimaryProject);
+    await get_data_from_source(
+      "api/Primaryprojects",
+      SetPrimaryProjects,
+      PROJECT
+    );
+    setActiveLader(false);
+  };
+
+  const get_data_from_source = async (endpoint, setData, key_chace) => {
+    //get Chace First
+    const getFromChace = localStorage.key_chace;
+    if (getFromChace) {
+      return setData(JSON.parse(getFromChace));
+    }
+
+    const response = await GET_API(endpoint);
+    if (response) {
+      setData(response);
+      localStorage.setItem(key_chace, JSON.stringify(response));
     }
   };
 
   const getData = async () => {
+    setActiveLader(true);
     await getExperience();
     await getPrimaryProjects();
-    setActiveLader(false);
+    setActiveLader(false)
   };
 
   useEffect(() => {
-    getData()
-    setActiveLader(true);
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -53,62 +66,68 @@ const Home = () => {
         <Header />
 
         {/* Featured Projects */}
-        <section className="my-20">
-          <h2 className="text-3xl font-bold text-center">Featured Projects</h2>
-          <div
-            className={`${
-              PrimaryProjects.length > 1
-                ? "grid md:grid-cols-2 gap-6"
-                : "flex justify-center"
-            } mt-6 px-6`}
-          >
-            {PrimaryProjects.map((item, i) => (
-              <div key={i}>
-                <div className="p-6 border rounded-lg shadow lg:h-[200px]">
-                  <Link to={item.link}>
-                    <h2 className="font-bold text-3xl mb-3 hover:underline">
-                      {item.name}
-                    </h2>
-                  </Link>
-                  <p>
-                    {new Date(item.created_at).toLocaleDateString("id-ID", {
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </p>
-                  <p>{item.description}</p>
-                </div>
+        {(PrimaryProjects.length > 1 || experiences.length > 1) && 
+          <>
+            <section className="my-20">
+              <h2 className="text-3xl font-bold text-center">
+                Featured Projects
+              </h2>
+              <div
+                className={`${
+                  PrimaryProjects.length > 1
+                    ? "grid md:grid-cols-2 gap-6"
+                    : "flex justify-center"
+                } mt-6 px-6`}
+              >
+                {PrimaryProjects.map((item, i) => (
+                  <div key={i}>
+                    <div className="p-6 border rounded-lg shadow lg:h-[200px]">
+                      <Link to={item.link}>
+                        <h2 className="font-bold text-3xl mb-3 hover:underline">
+                          {item.name}
+                        </h2>
+                      </Link>
+                      <p>
+                        {new Date(item.created_at).toLocaleDateString("id-ID", {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </p>
+                      <p>{item.description}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </section>
 
-        {/* Experience Section */}
-        <section className="my-20 px-6">
-          <Experience>
-            {localStorage.Token && Auth && (
-              <div className="flex justify-center items-center mb-6">
-                <button
-                  onClick={() => setOpenModal(true)}
-                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                >
-                  Tambah Experience
-                </button>
-              </div>
-            )}
-            {experiences.map((exp, i) => (
-              <ListExperience
-                key={i}
-                turnIndex={i}
-                index={2}
-                exp={exp}
-                experiences={experiences}
-                Setexperiences={Setexperiences}
-              />
-            ))}
-          </Experience>
-        </section>
+            {/* Experience Section */}
+            <section className="my-20 px-6">
+              <Experience>
+                {localStorage.Token && Auth && (
+                  <div className="flex justify-center items-center mb-6">
+                    <button
+                      onClick={() => setOpenModal(true)}
+                      className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                    >
+                      Tambah Experience
+                    </button>
+                  </div>
+                )}
+                {experiences.map((exp, i) => (
+                  <ListExperience
+                    key={i}
+                    turnIndex={i}
+                    index={2}
+                    exp={exp}
+                    experiences={experiences}
+                    Setexperiences={Setexperiences}
+                  />
+                ))}
+              </Experience>
+            </section>
+          </>
+        }
 
         {/* CTA */}
         <Contact />
